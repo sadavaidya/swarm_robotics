@@ -1,0 +1,12 @@
+# Colcon output and Python caches are rebuilt from source.
+/build/
+/install/
+/log/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local agent/account configuration is not part of the simulation repository.
+/.agents/
+/.aws/
+/.codex/

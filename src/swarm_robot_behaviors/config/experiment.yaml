@@ -1,0 +1,31 @@
+# Controller settings are read at startup. Edit this file and relaunch.
+# Pose access is SIMULATION GROUND TRUTH, not realistic relative localization.
+common:
+  world_frame: world
+  control_rate: 20.0
+  data_timeout: 0.5
+  max_linear_speed: 0.20
+  max_angular_speed: 0.8
+  k_distance: 0.6
+  k_heading: 1.5
+  distance_deadband: 0.03
+  heading_deadband: 0.03
+  turn_in_place_angle: 0.8
+  stop_distance: 0.25
+  clear_distance: 0.35
+  avoid_turn_speed: 0.5
+  min_turn_time: 0.7
+leader:
+  max_angular_speed: 0.7
+  cruise_speed: 0.12
+  startup_delay: 3.0
+  waypoint_tolerance: 0.20
+  waypoints: [2.5, 0.0, 2.5, 2.5, -2.0, 2.5, -2.0, 0.0]
+follower:
+  desired_follow_distance: 0.6
+robots:
+  - {namespace: robot_1, x: -2.0, y: 0.0, yaw: 0.0}
+  - {namespace: robot_2, x: -3.0, y: -0.8, yaw: 0.0, target: robot_1}
+  - {namespace: robot_3, x: -3.0, y: 0.8, yaw: 0.0, target: robot_2}
+  - {namespace: robot_4, x: -4.0, y: -1.5, yaw: 0.0, target: robot_3}
+  - {namespace: robot_5, x: -4.0, y: 1.5, yaw: 0.0, target: robot_4}

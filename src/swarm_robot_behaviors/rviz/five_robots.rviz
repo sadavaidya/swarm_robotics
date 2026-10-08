@@ -1,0 +1,207 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+Visualization Manager:
+  Class: ''
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: world
+    Frame Rate: 30
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Cell Size: 1.0
+    Plane Cell Count: 10
+    Reference Frame: world
+  - Class: rviz_default_plugins/TF
+    Name: TF
+    Enabled: true
+    Marker Scale: 0.08
+    Show Arrows: true
+    Show Axes: true
+    Show Names: false
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot 1
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_1/robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/Odometry
+    Name: Robot 1 odometry
+    Enabled: true
+    Topic:
+      Value: /robot_1/odom
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 10
+    Keep: 80
+    Position Tolerance: 0.1
+    Angle Tolerance: 0.2
+    Shape:
+      Value: Arrow
+      Color: 255; 80; 0
+      Alpha: 1
+      Shaft Length: 0.09
+      Shaft Radius: 0.002
+      Head Length: 0.03
+      Head Radius: 0.006
+    Covariance:
+      Value: false
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot 2
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_2/robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/Odometry
+    Name: Robot 2 odometry
+    Enabled: true
+    Topic:
+      Value: /robot_2/odom
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 10
+    Keep: 80
+    Position Tolerance: 0.1
+    Angle Tolerance: 0.2
+    Shape:
+      Value: Arrow
+      Color: 0; 200; 255
+      Alpha: 1
+      Shaft Length: 0.09
+      Shaft Radius: 0.002
+      Head Length: 0.03
+      Head Radius: 0.006
+    Covariance:
+      Value: false
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot 3
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_3/robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/Odometry
+    Name: Robot 3 odometry
+    Enabled: true
+    Topic:
+      Value: /robot_3/odom
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 10
+    Keep: 80
+    Position Tolerance: 0.1
+    Angle Tolerance: 0.2
+    Shape:
+      Value: Arrow
+      Color: 100; 255; 80
+      Alpha: 1
+      Shaft Length: 0.09
+      Shaft Radius: 0.002
+      Head Length: 0.03
+      Head Radius: 0.006
+    Covariance:
+      Value: false
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot 4
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_4/robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/Odometry
+    Name: Robot 4 odometry
+    Enabled: true
+    Topic:
+      Value: /robot_4/odom
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 10
+    Keep: 80
+    Position Tolerance: 0.1
+    Angle Tolerance: 0.2
+    Shape:
+      Value: Arrow
+      Color: 255; 220; 0
+      Alpha: 1
+      Shaft Length: 0.09
+      Shaft Radius: 0.002
+      Head Length: 0.03
+      Head Radius: 0.006
+    Covariance:
+      Value: false
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot 5
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_5/robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/Odometry
+    Name: Robot 5 odometry
+    Enabled: true
+    Topic:
+      Value: /robot_5/odom
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 10
+    Keep: 80
+    Position Tolerance: 0.1
+    Angle Tolerance: 0.2
+    Shape:
+      Value: Arrow
+      Color: 220; 100; 255
+      Alpha: 1
+      Shaft Length: 0.09
+      Shaft Radius: 0.002
+      Head Length: 0.03
+      Head Radius: 0.006
+    Covariance:
+      Value: false
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 10
+      Pitch: 1.15
+      Yaw: 0.3
+      Target Frame: world
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+Window Geometry:
+  Width: 1300
+  Height: 900

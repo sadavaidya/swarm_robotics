@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!-- Define passive docking plates or ideal front/rear angular-capture connectors and frames. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="front_dock" params="">
+    <!-- Phase 1: passive 36 x 12 x 14 mm plate; no latch or attachment plugin.
+         Outer face at x=0.062 m for the existing 100 mm chassis. -->
+    <link name="${prefix}front_dock_link">
+      <visual>
+        <geometry><box size="0.012 0.036 0.014"/></geometry>
+        <material name="dock_orange"><color rgba="1 0.45 0.05 1"/></material>
+      </visual>
+      <collision><geometry><box size="0.012 0.036 0.014"/></geometry></collision>
+      <inertial>
+        <mass value="0.003"/>
+        <inertia ixx="${0.003 * (0.036**2 + 0.014**2) / 12}" ixy="0" ixz="0"
+                 iyy="${0.003 * (0.012**2 + 0.014**2) / 12}" iyz="0"
+                 izz="${0.003 * (0.012**2 + 0.036**2) / 12}"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}front_dock_joint" type="fixed">
+      <parent link="${prefix}base_link"/><child link="${prefix}front_dock_link"/>
+      <origin xyz="${length / 2 + 0.006} 0 0"/>
+    </joint>
+    <gazebo reference="${prefix}front_dock_link"><material>Gazebo/Orange</material></gazebo>
+    <!-- +X is outward from the mating face. Two docked frames face opposite ways. -->
+    <link name="${prefix}front_dock_frame"/>
+    <joint name="${prefix}front_dock_frame_joint" type="fixed">
+      <parent link="${prefix}front_dock_link"/><child link="${prefix}front_dock_frame"/>
+      <origin xyz="0.006 0 0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="rear_dock" params="">
+    <!-- Optional rear interface for the shape-formation experiment. -->
+    <link name="${prefix}rear_dock_link">
+      <visual><geometry><box size="0.012 0.036 0.014"/></geometry>
+        <material name="rear_purple"><color rgba="0.6 0.2 0.8 1"/></material></visual>
+      <collision><geometry><box size="0.012 0.036 0.014"/></geometry></collision>
+      <inertial><mass value="0.003"/>
+        <inertia ixx="${0.003 * (0.036**2 + 0.014**2) / 12}" ixy="0" ixz="0"
+                 iyy="${0.003 * (0.012**2 + 0.014**2) / 12}" iyz="0"
+                 izz="${0.003 * (0.012**2 + 0.036**2) / 12}"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}rear_dock_joint" type="fixed">
+      <parent link="${prefix}base_link"/><child link="${prefix}rear_dock_link"/>
+      <origin xyz="${-length / 2 - 0.006} 0 0"/>
+    </joint>
+    <gazebo reference="${prefix}rear_dock_link"><material>Gazebo/Purple</material></gazebo>
+    <link name="${prefix}rear_dock_frame"/>
+    <joint name="${prefix}rear_dock_frame_joint" type="fixed">
+      <parent link="${prefix}rear_dock_link"/><child link="${prefix}rear_dock_frame"/>
+      <origin xyz="-0.006 0 0" rpy="0 0 ${pi}"/>
+    </joint>
+  </xacro:macro>
+  <!-- Simulation connector: long narrow stem plus angular-capture magnetic tip.
+       The physics plugin locks the captured angle. No real CAD/mechanism claim.
+       Stems/tips depict compliant capture hardware; chassis contacts remain physical. -->
+  <xacro:macro name="formation_dock" params="side sign">
+    <link name="${prefix}${side}_dock_link">
+      <visual><origin xyz="${sign * 0.078} 0 0"/>
+        <geometry><box size="0.056 0.010 0.010"/></geometry><material name="silver"/></visual>
+      <visual><origin xyz="${sign * 0.11} 0 0"/>
+        <geometry><sphere radius="0.008"/></geometry>
+        <material name="capture_green"><color rgba="0.2 0.9 0.3 1"/></material></visual>
+      <inertial><origin xyz="${sign * 0.08} 0 0"/><mass value="0.003"/>
+        <inertia ixx="0.00000005" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}${side}_dock_joint" type="fixed">
+      <parent link="${prefix}base_link"/><child link="${prefix}${side}_dock_link"/>
+    </joint>
+    <gazebo reference="${prefix}${side}_dock_link"><material>Gazebo/Green</material></gazebo>
+    <link name="${prefix}${side}_dock_frame"/>
+    <joint name="${prefix}${side}_dock_frame_joint" type="fixed">
+      <parent link="${prefix}${side}_dock_link"/><child link="${prefix}${side}_dock_frame"/>
+      <origin xyz="${sign * 0.11} 0 0" rpy="0 0 ${0 if sign == 1 else pi}"/>
+    </joint>
+  </xacro:macro>
+</robot>

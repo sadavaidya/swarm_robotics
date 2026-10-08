@@ -1,0 +1,98 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: odom
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 0.1
+      Plane Cell Count: 20
+      Reference Frame: odom
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Enabled: true
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 1
+      Visual Enabled: true
+      Collision Enabled: false
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+      Marker Scale: 0.05
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+    - Class: rviz_default_plugins/Odometry
+      Name: Odometry
+      Enabled: true
+      Topic:
+        Value: /odom
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+      Keep: 100
+      Position Tolerance: 0.01
+      Angle Tolerance: 0.05
+      Shape:
+        Value: Arrow
+        Color: 255; 80; 0
+        Alpha: 1
+        Shaft Length: 0.035
+        Shaft Radius: 0.002
+        Head Length: 0.015
+        Head Radius: 0.006
+      Covariance:
+        Value: false
+    - Class: rviz_default_plugins/Axes
+      Name: IMU frame
+      Enabled: true
+      Reference Frame: imu_link
+      Length: 0.04
+      Radius: 0.002
+    - Class: rviz_default_plugins/Axes
+      Name: Front range frame
+      Enabled: true
+      Reference Frame: front_range_link
+      Length: 0.04
+      Radius: 0.002
+    - Class: rviz_default_plugins/LaserScan
+      Name: Front range
+      Enabled: true
+      Topic:
+        Value: /range/front
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Color Transformer: FlatColor
+      Color: 255; 200; 0
+      Alpha: 1
+      Style: Spheres
+      Size (m): 0.01
+      Decay Time: 0
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 0.65
+      Pitch: 0.55
+      Yaw: 0.8
+      Target Frame: base_footprint
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.03
+Window Geometry:
+  Width: 1100
+  Height: 800

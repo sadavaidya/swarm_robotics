@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!-- Define the primitive differential-drive robot and optional two-port docking geometry. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swarm_robot">
+  <xacro:arg name="formation_docking" default="false"/>
+  <xacro:arg name="rear_docking" default="false"/>
+  <xacro:arg name="robot_namespace" default="/"/>
+  <xacro:arg name="frame_prefix" default=""/>
+  <xacro:property name="robot_namespace" value="$(arg robot_namespace)"/>
+  <xacro:property name="prefix" value="$(arg frame_prefix)"/>
+  <xacro:include filename="swarm_robot.gazebo.xacro"/>
+  <xacro:include filename="sensors.xacro"/>
+  <xacro:include filename="docking.xacro"/>
+
+  <!-- SI units. +X is forward, +Y is left, +Z is up. -->
+  <xacro:property name="length" value="0.10"/>
+  <xacro:property name="width" value="0.10"/>
+  <xacro:property name="height" value="0.025"/>
+  <xacro:property name="body_mass" value="0.20"/>
+  <xacro:property name="wheel_radius" value="0.02"/>
+  <xacro:property name="wheel_width" value="0.01"/>
+  <xacro:property name="wheel_separation" value="0.09"/>
+  <xacro:property name="wheel_mass" value="0.015"/>
+  <xacro:property name="axle_x" value="0.02"/>
+  <xacro:property name="caster_radius" value="0.008"/>
+  <xacro:property name="caster_mass" value="0.005"/>
+  <!-- Wheels fit under the full-width body with 1 mm clearance. -->
+  <xacro:property name="body_z" value="${2 * wheel_radius + 0.001 + height / 2}"/>
+
+  <material name="blue"><color rgba="0.1 0.4 0.8 1"/></material>
+  <material name="rubber"><color rgba="0.08 0.08 0.08 1"/></material>
+  <material name="silver"><color rgba="0.65 0.65 0.65 1"/></material>
+
+  <!-- Massless ground-level root avoids a KDL root-inertia warning. -->
+  <link name="${prefix}base_footprint"/>
+  <joint name="${prefix}base_joint" type="fixed">
+    <parent link="${prefix}base_footprint"/><child link="${prefix}base_link"/>
+    <origin xyz="0 0 ${body_z}"/>
+  </joint>
+  <link name="${prefix}base_link">
+    <visual>
+      <geometry><box size="${length} ${width} ${height}"/></geometry>
+      <material name="blue"/>
+    </visual>
+    <collision><geometry><box size="${length} ${width} ${height}"/></geometry></collision>
+    <inertial>
+      <mass value="${body_mass}"/>
+      <!-- Solid box inertia about its centre. -->
+      <inertia ixx="${body_mass * (width**2 + height**2) / 12}" ixy="0" ixz="0"
+               iyy="${body_mass * (length**2 + height**2) / 12}" iyz="0"
+               izz="${body_mass * (length**2 + width**2) / 12}"/>
+    </inertial>
+  </link>
+  <gazebo reference="${prefix}base_link"><material>Gazebo/Blue</material></gazebo>
+
+  <xacro:macro name="wheel" params="side sign">
+    <link name="${prefix}${side}_wheel_link">
+      <!-- URDF cylinders point along Z; rotate geometry onto the Y axle. -->
+      <visual>
+        <origin rpy="${pi / 2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="rubber"/>
+      </visual>
+      <collision>
+        <origin rpy="${pi / 2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <!-- Solid cylinder inertia, expressed with its axle along Y. -->
+        <inertia ixx="${wheel_mass * (3 * wheel_radius**2 + wheel_width**2) / 12}"
+                 ixy="0" ixz="0" iyy="${wheel_mass * wheel_radius**2 / 2}" iyz="0"
+                 izz="${wheel_mass * (3 * wheel_radius**2 + wheel_width**2) / 12}"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}${side}_wheel_joint" type="continuous">
+      <parent link="${prefix}base_link"/><child link="${prefix}${side}_wheel_link"/>
+      <origin xyz="${axle_x} ${sign * wheel_separation / 2} ${wheel_radius - body_z}"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.0001" friction="0.0"/>
+    </joint>
+    <gazebo reference="${prefix}${side}_wheel_link">
+      <material>Gazebo/Black</material>
+      <mu1>1.0</mu1><mu2>1.0</mu2>
+      <kp>100000</kp><kd>10</kd>
+      <minDepth>0.0001</minDepth><maxVel>0.1</maxVel>
+    </gazebo>
+  </xacro:macro>
+  <xacro:wheel side="left" sign="1"/>
+  <xacro:wheel side="right" sign="-1"/>
+
+  <!-- Passive ball-caster approximation: fixed sphere with zero tangential
+       friction. It supports weight but does not model a swivel mechanism. -->
+  <link name="${prefix}caster_link">
+    <visual>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision><geometry><sphere radius="${caster_radius}"/></geometry></collision>
+    <inertial>
+      <mass value="${caster_mass}"/>
+      <inertia ixx="${0.4 * caster_mass * caster_radius**2}" ixy="0" ixz="0"
+               iyy="${0.4 * caster_mass * caster_radius**2}" iyz="0"
+               izz="${0.4 * caster_mass * caster_radius**2}"/>
+    </inertial>
+  </link>
+  <joint name="${prefix}caster_joint" type="fixed">
+    <parent link="${prefix}base_link"/><child link="${prefix}caster_link"/>
+    <origin xyz="-0.035 0 ${caster_radius - body_z}"/>
+  </joint>
+  <gazebo reference="${prefix}caster_link">
+    <material>Gazebo/Grey</material>
+    <mu1>0.0</mu1><mu2>0.0</mu2>
+    <kp>100000</kp><kd>10</kd>
+    <minDepth>0.0001</minDepth><maxVel>0.1</maxVel>
+  </gazebo>
+
+  <xacro:if value="$(arg formation_docking)">
+    <xacro:formation_dock side="front" sign="1"/>
+    <xacro:formation_dock side="rear" sign="-1"/>
+  </xacro:if>
+  <xacro:unless value="$(arg formation_docking)">
+    <xacro:front_dock/>
+    <xacro:if value="$(arg rear_docking)"><xacro:rear_dock/></xacro:if>
+  </xacro:unless>
+  <xacro:swarm_sensors/>
+  <xacro:swarm_drive/>
+</robot>

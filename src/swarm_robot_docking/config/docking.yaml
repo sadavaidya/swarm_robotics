@@ -1,0 +1,37 @@
+# All robot identity is deployment configuration, never part of the shape library.
+robots:
+  - {id: robot_1, x: -2.0, y: -1.5, yaw: 0.0}
+  - {id: robot_2, x: -1.0, y: 0.0, yaw: 0.0}
+  - {id: robot_3, x: 1.0, y: 0.0, yaw: 3.141592653589793}
+  - {id: robot_4, x: -1.8, y: 0.8, yaw: 0.0}
+  - {id: robot_5, x: 1.8, y: 0.8, yaw: 3.141592653589793}
+# Inner wall faces are at +/-5 m in worlds/docking_arena.world.
+# Fixed poses above remain available with random_spawn:=false.
+spawn:
+  arena_bounds: [-5.0, 5.0, -5.0, 5.0]
+  min_separation: 0.8  # meters between robot centers
+  wall_clearance: 0.5 # meters from a robot center to each wall
+allocator:
+  rendezvous_clearance: 0.7
+  heartbeat_timeout: 1.8
+  bid_collection_time: 0.6
+  dock_gap: 0.012
+  staging_distance: 0.30
+  dock_separation_tolerance: 0.04
+  dock_lateral_tolerance: 0.02
+  dock_yaw_tolerance: 0.0872664626
+  dock_dwell: 0.5
+agent:
+  heartbeat_rate: 4.0
+  data_timeout: 0.7
+  heading_weight: 0.08
+controller:
+  data_timeout: 0.7
+  control_rate: 20.0
+  max_linear_speed: 0.15
+  final_linear_speed: 0.035
+  max_angular_speed: 0.6
+  k_distance: 0.8
+  k_heading: 2.0
+  position_tolerance: 0.004
+  yaw_tolerance: 0.035
