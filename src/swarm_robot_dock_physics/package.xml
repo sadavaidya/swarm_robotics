@@ -2,7 +2,7 @@
 <package format="3">
   <name>swarm_robot_dock_physics</name><version>0.1.0</version>
   <description>Gazebo Classic physical latches for the primitive swarm connectors.</description>
-  <maintainer email="svaidya2320@gmail.com">sadashiv</maintainer><license>Apache-2.0</license>
+  <maintainer email="svaidya2320@gmail.com">sadashiv</maintainer><license>MIT</license>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>gazebo_ros</depend><depend>rclcpp</depend><depend>std_msgs</depend><depend>std_srvs</depend>
   <build_depend>gazebo_dev</build_depend><depend>nlohmann-json-dev</depend>

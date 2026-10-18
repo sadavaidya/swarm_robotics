@@ -300,5 +300,4 @@ it is not an implementation of ORCA or the full Dynamic Window Approach.
 For platform citations, see the shared
 [robot description references](../swarm_robot_description/README.md#original-papers-and-platform-references).
 
-License declaration: Apache-2.0 in `package.xml`; see the workspace guide for
-the current repository-wide license metadata status.
+Licensed under the [MIT License](../../LICENSE).

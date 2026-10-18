@@ -4,7 +4,7 @@
   <version>0.1.0</version>
   <description>Distributed role auctions and planar ten-robot formations.</description>
   <maintainer email="svaidya2320@gmail.com">sadashiv</maintainer>
-  <license>Apache-2.0</license>
+  <license>MIT</license>
   <buildtool_depend>ament_python</buildtool_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rcl_interfaces</exec_depend>

@@ -1,15 +1,21 @@
-# Swarm robot simulation: connected shape formation
+# Swarm robotics simulation: leader–follower and 2D shape formation
 
-A ROS 2 Humble workspace for experimenting with compact differential-drive
-robots in Gazebo Classic 11. The main demo runs **ten robots** that exchange
-bids, choose shape roles, move concurrently, and physically connect into a
-LINE, CIRCLE or approximate SQUARE. Sending a different shape stops the fleet,
-disconnects the current assembly, and starts formation from the current poses.
+A ROS 2 Humble / Gazebo Classic 11 workspace with two main simulation systems
+for compact differential-drive robots:
 
-The robot uses primitive geometry, ideal wheel feedback, an IMU, a three-ray
-front distance scanner, and optional front/rear docking connectors. This is a
-planar simulation testbed for future swarm hardware; no detailed CAD meshes
-are required to run it.
+| System | Robots | What to expect | Run instructions |
+| --- | --- | --- | --- |
+| Leader–follower | 5 | One waypoint-following leader and four followers forming a chain. Motion starts automatically. | [System 1](#system-1-leaderfollower) |
+| 2D connected shape formation | 10 | Distributed role allocation, concurrent motion and simulated physical connections into LINE, CIRCLE or approximate SQUARE. Robots wait for a shape command. | [System 2](#system-2-2d-connected-shape-formation) |
+
+Start with leader–follower for the simpler control example, then try shape
+formation. Both use the same primitive robot model, ideal wheel feedback, IMU,
+and three-ray front distance scanner. Shape formation adds front/rear docking
+connectors and reconfiguration from the current poses.
+
+These are simulation examples. Pose information comes from Gazebo ground truth;
+real robot firmware, localization and hardware integration are future work.
+No detailed CAD meshes are required to run either system.
 
 ## Packages
 
@@ -44,16 +50,15 @@ No `ros2_control` controller manager is needed: wheel commands use
 
 ## Clone, install dependencies and build
 
-Replace `YOUR_REPOSITORY_URL` with this repository's GitHub clone URL. Clone
-the repository as the workspace root, rather than nesting it inside another
-workspace's `src/` directory:
+Clone the repository as the workspace root, rather than nesting it inside
+another workspace's `src/` directory:
 
 ```bash
 sudo apt update
 sudo apt install -y git
 mkdir -p ~/robotics/projects
 cd ~/robotics/projects
-git clone YOUR_REPOSITORY_URL Swarm_robot
+git clone https://github.com/sadavaidya/swarm_robotics.git Swarm_robot
 cd Swarm_robot
 
 source /opt/ros/humble/setup.bash
@@ -76,7 +81,56 @@ already exists. Package manifests declare the remaining ROS dependencies.
 The commands above require Ubuntu and ROS apt repositories; a fresh dependency
 download on another machine has not been verified by the local build checks.
 
-## Run the ten-robot demo
+## System 1: leader–follower
+
+After the shared installation/build above, run this in terminal 1. Run only
+one demo at a time on the same ROS domain and Gazebo master:
+
+```bash
+source /opt/ros/humble/setup.bash
+cd ~/robotics/projects/Swarm_robot
+source install/setup.bash
+ros2 launch swarm_robot_behaviors five_robot_leader_follow.launch.py
+```
+
+Gazebo and RViz open with five robots. `robot_1` follows a rectangular waypoint
+loop; `robot_2` follows `robot_1`, and so on through `robot_5`. No separate start
+command is needed. Allow roughly 30–60 simulation seconds for the chain to
+settle. Straight-line moving gaps are approximately 0.8 m with the default
+settings; the stopped spacing setpoint is 0.6 m.
+
+In terminal 2, observe the controller state and simulated pose:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/robotics/projects/Swarm_robot/install/setup.bash
+ros2 topic echo /robot_2/behavior/state --once
+ros2 topic echo /robot_1/odom --once
+ros2 run tf2_ros tf2_echo world robot_5/base_link
+```
+
+To pause every controller, run in terminal 2 (Ctrl+C ends the TF viewer first):
+
+```bash
+ros2 service call /robot_1/leader_controller/set_enabled std_srvs/srv/SetBool '{data: false}'
+for i in 2 3 4 5; do
+  ros2 service call /robot_${i}/follower_controller/set_enabled std_srvs/srv/SetBool '{data: false}'
+done
+```
+
+Use `data: true` in the same calls to resume. Ctrl+C in terminal 1 shuts down
+this demo; wait for it to exit before starting shape formation. The earlier
+leader–follower demo has no independent command watchdog after a controller
+hard failure, and its narrow front scan is not comprehensive collision avoidance.
+
+For headless operation, append `gui:=false rviz:=false` to the launch command.
+To change waypoints, following distance or gains, edit
+[`experiment.yaml`](src/swarm_robot_behaviors/config/experiment.yaml) and
+relaunch. The launch requires five robots. See the
+[leader–follower guide](src/swarm_robot_behaviors/README.md) for control equations,
+parameter details and the optional live verification script.
+
+## System 2: 2D connected shape formation
 
 In terminal 1, stop any earlier demo on the same ROS domain/Gazebo master, then:
 
@@ -112,8 +166,17 @@ the same sourcing, DDS profile, and any isolation exports in every CLI terminal.
 ros2 topic echo /swarm/formation_status std_msgs/msg/String --qos-durability transient_local
 # Ctrl+C ends the status viewer. Publish the next command:
 ros2 topic pub --once --keep-alive 2 /swarm/shape_command std_msgs/msg/String "{data: 'SQUARE'}"
-ros2 topic pub --once --keep-alive 2 /swarm/shape_command std_msgs/msg/String "{data: 'LINE'}"
+```
 
+Wait for `COMPLETE` again in the status viewer before sending LINE:
+
+```bash
+ros2 topic pub --once --keep-alive 2 /swarm/shape_command std_msgs/msg/String "{data: 'LINE'}"
+```
+
+To stop or reset the formation:
+
+```bash
 # Stop where the robots are; existing joints remain latched:
 ros2 topic pub --once --keep-alive 2 /swarm/shape_command std_msgs/msg/String "{data: 'STOP'}"
 
@@ -132,7 +195,15 @@ corners because ten equal connector segments cannot tile four equal straight
 sides. Completion checks the actual connected graph and permits up to 5 cm
 position and 0.25 rad heading error per role.
 
-## What runs on the robots, and what is shared?
+Ctrl+C in terminal 1 shuts down this demo. To tune pose freshness, clearance,
+spawn layout or connector spacing, see
+[`formation.yaml`](src/swarm_robot_shape_formation/config/formation.yaml) and the
+[shape formation guide](src/swarm_robot_shape_formation/README.md). The launch
+requires exactly ten robots; arena bounds and robot geometry also have fixed
+assumptions in the planner and motion prediction. Changing spacing requires
+matching connector geometry; it is not an arbitrary visual separation setting.
+
+## Shape formation architecture
 
 ```mermaid
 flowchart TD
@@ -192,7 +263,7 @@ RViz shows the models, TF, odometry and formation markers.
 The formation watchdog owns `/robot_N/cmd_vel`; use the single-robot demo for
 manual driving instead of publishing competing commands during formation.
 
-## Other demos
+## Additional demos
 
 Run one demo at a time on the default domain/master:
 
@@ -200,14 +271,13 @@ Run one demo at a time on the default domain/master:
 # One robot: manual /cmd_vel driving and sensor inspection
 ros2 launch swarm_robot_description sim.launch.py rviz:=true
 
-# Five robots: waypoint leader and four followers
-ros2 launch swarm_robot_behaviors five_robot_leader_follow.launch.py
-
 # Five robots: logical pairing with a centralized allocator
 ros2 launch swarm_robot_docking five_robot_docking_demo.launch.py
 ros2 topic pub --once --keep-alive 2 /swarm/pair_count std_msgs/msg/Int32 '{data: 2}'
 ```
 
+The pairing demo is an earlier standalone experiment, separate from the two
+main systems above; its package also supplies utilities used by shape formation.
 See each package guide for its controls and limits. Pair count requests belong
 to the five-robot pairing demo; shape names belong to the ten-robot demo.
 
@@ -225,7 +295,22 @@ not already used by another experiment:
 ```bash
 export ROS_DOMAIN_ID=91
 export GAZEBO_MASTER_URI=http://127.0.0.1:11391
-# Launch a fresh ten-robot demo after these exports, then in the test terminal:
+```
+
+For leader–follower, launch a fresh five-robot demo with those exports, then
+run from the workspace root in the sourced verification terminal:
+
+```bash
+python3 src/swarm_robot_behaviors/test/verify_live.py --seconds 160 --safety
+```
+
+This check moves the robots, inserts temporary obstacles and leaves controllers
+disabled. Shut down that demo before testing shape formation.
+
+For shape formation, launch a fresh ten-robot demo with those exports, then
+run from the workspace root in the sourced verification terminal:
+
+```bash
 python3 src/swarm_robot_shape_formation/test/verify_live.py \
   --shapes CIRCLE SQUARE LINE CIRCLE --reconfigure \
   --report-path /tmp/connected-shapes.json
@@ -269,10 +354,8 @@ For the role auction, see Choi, Brunet and How's
 The current implementation is a simplified single-role CBAA-style auction;
 it does not implement full multi-task CBBA or inherit all of that paper's guarantees.
 
-## License metadata
+## License
 
-The behavior, pairing, shape formation and physics package manifests declare
-Apache-2.0. The description package still has an unresolved license declaration,
-and this workspace has no root license file. A repository-wide license must be
-chosen and the remaining declaration resolved before presenting the entire
-repository as consistently licensed open-source software.
+This repository is licensed under the [MIT License](LICENSE). All five package
+manifests and Python package metadata use the same license. External ROS/Gazebo
+dependencies retain their own licenses.

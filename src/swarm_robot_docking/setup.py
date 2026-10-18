@@ -12,7 +12,7 @@ setup(
          for folder in ('launch', 'config', 'rviz', 'worlds')],
     install_requires=['setuptools'], zip_safe=True,
     maintainer='sadashiv', maintainer_email='svaidya2320@gmail.com',
-    description='Shape-only auctions and logical pair docking.', license='Apache-2.0',
+    description='Shape-only auctions and logical pair docking.', license='MIT',
     tests_require=['pytest'],
     entry_points={'console_scripts': [
         name + ' = ' + PACKAGE + '.' + name + ':main'

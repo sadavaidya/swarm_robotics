@@ -17,7 +17,7 @@ setup(
     maintainer='sadashiv',
     maintainer_email='svaidya2320@gmail.com',
     description='Simple namespaced leader-following in Gazebo Classic.',
-    license='Apache-2.0',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={'console_scripts': [
         'leader_controller = swarm_robot_behaviors.leader_controller:main',

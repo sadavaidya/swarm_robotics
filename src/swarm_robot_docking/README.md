@@ -314,5 +314,4 @@ papers' full protocols or their experimental systems.
    requires two robots per task; our small matching problem is custom and does
    not claim general optimality for the full docking/control problem.
 
-License declaration: Apache-2.0 in `package.xml`; see the workspace guide for
-the current repository-wide license metadata status.
+Licensed under the [MIT License](../../LICENSE).

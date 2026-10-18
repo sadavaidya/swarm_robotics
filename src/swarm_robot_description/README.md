@@ -352,5 +352,6 @@ the software foundations, not papers specifying this robot's hardware or dimensi
    Classic 11, not the original 2004 release.
 
 The plugin source links above document the concrete drive, encoder feedback and
-sensor behavior used here. The description package's license declaration remains
-unresolved in `package.xml`; see the workspace guide's license metadata section.
+sensor behavior used here.
+
+Licensed under the [MIT License](../../LICENSE).

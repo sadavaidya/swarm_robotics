@@ -305,5 +305,4 @@ middleware context; they do not imply an implementation of a paper's full contro
    [DOI: 10.1126/scirobotics.abm6074](https://doi.org/10.1126/scirobotics.abm6074).
    **Platform basis:** reusable namespaced ROS 2 controllers and DDS message exchange.
 
-License declaration: Apache-2.0 in `package.xml`; see the workspace guide for
-the current repository-wide license metadata status.
+Licensed under the [MIT License](../../LICENSE).

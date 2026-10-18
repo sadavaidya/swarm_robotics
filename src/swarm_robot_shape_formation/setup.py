@@ -17,7 +17,7 @@ setup(
     install_requires=['setuptools'], zip_safe=True,
     maintainer='sadashiv', maintainer_email='svaidya2320@gmail.com',
     description='Peer auction and safe planar formation for ten primitive robots.',
-    license='Apache-2.0', tests_require=['pytest'],
+    license='MIT', tests_require=['pytest'],
     entry_points={'console_scripts': [
         name+' = '+PACKAGE+'.'+name+':main'
         for name in ('shape_goal', 'shape_agent', 'formation_monitor', 'velocity_guard')

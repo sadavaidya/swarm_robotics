@@ -135,5 +135,4 @@ Runtime cross-model joints are also demonstrated by
 [PAL Robotics' gazebo_ros_link_attacher](https://github.com/pal-robotics/gazebo_ros_link_attacher).
 That is a software reference, not a paper or a dependency of this package.
 
-License declaration: Apache-2.0 in `package.xml`; see the workspace guide for
-the current repository-wide license metadata status.
+Licensed under the [MIT License](../../LICENSE).

@@ -1,6 +1,8 @@
 # Colcon output and Python caches are rebuilt from source.
 /build/
+/build_3d/
 /install/
+/install_3d/
 /log/
 __pycache__/
 *.py[cod]
@@ -10,3 +12,5 @@ __pycache__/
 /.agents/
 /.aws/
 /.codex/
+
+/model_part_files/
