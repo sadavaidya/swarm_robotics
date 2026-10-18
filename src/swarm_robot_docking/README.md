@@ -21,7 +21,7 @@ and its [latch plugin](../swarm_robot_dock_physics/README.md).
 ## Build and launch
 
 ```bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 source install/setup.bash
@@ -75,7 +75,7 @@ In every command terminal:
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 ```
 
 Request **one total pair**:

@@ -13,7 +13,7 @@ Merely standing near the target points does not count as completion.
 Stop an earlier swarm launch before starting this one on the same ROS domain.
 
 ```bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 source install/setup.bash
@@ -29,7 +29,7 @@ In another terminal:
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 shape_share=$(ros2 pkg prefix --share swarm_robot_shape_formation)
 export FASTRTPS_DEFAULT_PROFILES_FILE="$shape_share/config/fastdds_udp.xml"
 ros2 topic pub --once --keep-alive 2 --qos-durability volatile \

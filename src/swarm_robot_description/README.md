@@ -71,7 +71,7 @@ interference, packet loss, or ESP32 networking.
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 colcon build --symlink-install
 source install/setup.bash
 ros2 launch swarm_robot_description sim.launch.py rviz:=true
@@ -110,7 +110,7 @@ Source each additional terminal:
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 ```
 
 Run one motion publisher at a time. End it with Ctrl+C before starting the next.

@@ -11,7 +11,7 @@ launch files are reused without modification. No meshes or model downloads.
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 colcon build --symlink-install
 source install/setup.bash
 
@@ -159,7 +159,7 @@ applicable):
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 ros2 topic list | grep robot_
 
 ros2 topic echo /robot_1/cmd_vel --once

@@ -58,8 +58,8 @@ sudo apt update
 sudo apt install -y git
 mkdir -p ~/robotics/projects
 cd ~/robotics/projects
-git clone https://github.com/sadavaidya/swarm_robotics.git Swarm_robot
-cd Swarm_robot
+git clone https://github.com/sadavaidya/swarm_robotics.git swarm_robotics
+cd swarm_robotics
 
 source /opt/ros/humble/setup.bash
 sudo apt install -y build-essential cmake python3-colcon-common-extensions \
@@ -81,6 +81,13 @@ already exists. Package manifests declare the remaining ROS dependencies.
 The commands above require Ubuntu and ROS apt repositories; a fresh dependency
 download on another machine has not been verified by the local build checks.
 
+The commands below assume the checkout is at
+`~/robotics/projects/swarm_robotics`. If you cloned elsewhere, use your actual
+workspace path in each terminal. Do not move or rename a built workspace:
+`--symlink-install` and CMake caches contain absolute paths. After a move,
+start a fresh terminal, move the old `build/` and `install/` directories out of
+the workspace, and repeat the build before sourcing `install/setup.bash`.
+
 ## System 1: leader–follower
 
 After the shared installation/build above, run this in terminal 1. Run only
@@ -88,7 +95,7 @@ one demo at a time on the same ROS domain and Gazebo master:
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 source install/setup.bash
 ros2 launch swarm_robot_behaviors five_robot_leader_follow.launch.py
 ```
@@ -103,7 +110,7 @@ In terminal 2, observe the controller state and simulated pose:
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 ros2 topic echo /robot_2/behavior/state --once
 ros2 topic echo /robot_1/odom --once
 ros2 run tf2_ros tf2_echo world robot_5/base_link
@@ -136,7 +143,7 @@ In terminal 1, stop any earlier demo on the same ROS domain/Gazebo master, then:
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 source install/setup.bash
 ros2 launch swarm_robot_shape_formation ten_robot_shape_demo.launch.py
 ```
@@ -150,7 +157,7 @@ In terminal 2, source the workspace and match the demo's Fast DDS UDP profile:
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/robotics/projects/Swarm_robot/install/setup.bash
+source ~/robotics/projects/swarm_robotics/install/setup.bash
 shape_share=$(ros2 pkg prefix --share swarm_robot_shape_formation)
 export FASTRTPS_DEFAULT_PROFILES_FILE="$shape_share/config/fastdds_udp.xml"
 

@@ -24,7 +24,7 @@ setup for the remaining dependencies.
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/robotics/projects/Swarm_robot
+cd ~/robotics/projects/swarm_robotics
 colcon build --symlink-install
 source install/setup.bash
 ros2 launch swarm_robot_shape_formation ten_robot_shape_demo.launch.py
